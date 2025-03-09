@@ -1,0 +1,23 @@
+NOTAS DE IMPLEMENTAÇÃO - VERSÃO 2.0
+
+- Problema no carregamento da câmera: parece ser uma limitação do emulador, no device real funciona ok
+- Lembrar: imagens muito grandes causam travamento na extração de texto
+- Testar DIO como alternativa ao HTTP package? Vantagens: cancelamento de requests, melhor tratamento de erros.
+
+TODO (próxima versão):
+- Otimizar UI da tela de livros, muito densa com muitos filtros
+- Mudar a estratégia de cache para imagens localmente
+
+Ideias para o scanner:
+- ML Kit Text Recognition pode ser uma alternativa local ao OCR da API
+- Testar Google Books API como fallback quando OCR falhar
+
+Performance:
+- A lista de livros fica lenta com mais de 100 itens
+- Implementar paginação? Ou lazy loading?
+- ItemExtent na ListView pode melhorar perf
+
+Reunião 28/02:
+- Cliente quer relatórios exportáveis (PDF/Excel)
+- Dashboard com KPIs na tela inicial
+- Descartada a ideia de QR codes para cada livro (custo/benefício) 

@@ -1,0 +1,11 @@
+[09/03/2024 16:45:32] Iniciando testes de API...
+[09/03/2024 16:45:33] GET /api/inventory/books - 200 OK - 32 livros encontrados
+[09/03/2024 16:45:35] GET /api/inventory/books/1 - 200 OK - Detalhes do livro recuperados
+[09/03/2024 16:45:38] POST /api/images/analyze - 500 ERROR - Falha ao analisar imagem
+[09/03/2024 16:45:40] GET /api/inventory/books?genre=ficção - 200 OK - 12 livros encontrados
+[09/03/2024 16:45:42] Testes finalizados. 4/5 sucesso.
+
+NOTAS:
+- Verificar por que a análise de imagem está falhando
+- Adicionar log de requests ao backend?
+- Recarregar testes depois de consertar o OCR no backend 

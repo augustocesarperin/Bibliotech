@@ -1,0 +1,78 @@
+import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:image_picker/image_picker.dart';
+
+// TODO: Implementar zoom e flash
+// FIXME: Problema com orientação da imagem em alguns dispositivos
+
+class CameraService {
+  CameraController controller;
+  List<CameraDescription> cameras;
+  bool isInitialized = false;
+  
+  Future<void> initialize() async {
+    try {
+      cameras = await availableCameras();
+      if (cameras.length > 0) {
+        controller = CameraController(
+          cameras[0],
+          ResolutionPreset.high,
+          enableAudio: false,
+        );
+        await controller.initialize();
+        isInitialized = true;
+      } else {
+        print("Nenhuma câmera encontrada");
+      }
+    } catch (e) {
+      print("Erro ao inicializar câmera: ${e.toString()}");
+      throw e;
+    }
+  }
+  
+  Future<File> takePicture() async {
+    if (!isInitialized || controller == null) {
+      throw "Câmera não inicializada";
+    }
+    
+    try {
+      // Garantir que a câmera está focada antes de capturar
+      await controller.lockCaptureOrientation();
+      
+      final XFile file = await controller.takePicture();
+      
+      // Salvar a imagem em um diretório temporário
+      final directory = await getTemporaryDirectory();
+      final String fileName = path.basename(file.path);
+      final savedImage = File(file.path).copySync('${directory.path}/$fileName');
+      
+      return savedImage;
+    } catch (e) {
+      print("Erro ao tirar foto: ${e.toString()}");
+      return null;
+    }
+  }
+  
+  // Método para selecionar imagem da galeria - pode ser melhorado no futuro
+  Future<File> pickImageFromGallery() async {
+    try {
+      final picker = ImagePicker();
+      final XFile pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      
+      if (pickedFile == null) return null;
+      
+      return File(pickedFile.path);
+    } catch (e) {
+      print("Erro ao selecionar imagem: ${e.toString()}");
+      return null;
+    }
+  }
+  
+  void dispose() {
+    controller?.dispose();
+    isInitialized = false;
+  }
+} 
